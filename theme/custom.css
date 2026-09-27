@@ -1,33 +1,127 @@
-/* 简洁明暗双主题 + 响应式页面宽度 + 更好看的字体
-   仅保留美化：排版、字体、宽度；配色交给 mdBook 内置 light / coal 两套。 */
+/* ===========================================================================
+   复刻 ai-agent-book 的扁平主题（icyfenix 风格） —— 移植进 mdBook
+   ===========================================================================
+   设计 token 对齐 ai-agent-book/extras/book-theme.css（实测 icyfenix.cn）:
+     - 白底 + 左侧栏 + 文字，去掉 Material 式的卡片/阴影/圆角
+     - 主文字深蓝灰 #2c3e50（非纯黑）
+     - 导航栏/侧栏用 1px 浅灰 #eaecef 细线分隔
+     - 正文链接蓝 #3884fe，悬停墨绿 #42b983
+     - 正文 16px / 1.8
+     - 字体: Noto Sans SC / JetBrains Mono
+   浅色=mdBook 内置 light，深色=coal。配色走 mdBook 的 --xxx 变量。
+   =========================================================================== */
 
-/* ---- 字体：正文用系统无衬线、优先中文字体 ---- */
+/* ---- 1. 设计 token + 字体 ---- */
+:root {
+  --fenix-ink:        #2c3e50;   /* 主文字 + h1 + 链接默认色 */
+  --fenix-ink-soft:   #57606a;
+  --fenix-ink-mute:   #8b949e;
+  --fenix-border:     #eaecef;
+  --fenix-link:       #3884fe;
+  --fenix-link-hover: #42b983;
+  --fenix-bg:         #ffffff;
+  --fenix-bg-soft:    #f6f8fa;
+  --fenix-code-bg:    rgba(27, 31, 35, 0.05);
+  --fenix-code-ink:   #476582;
+}
+
 html, body, .content main, .sidebar, .menu-title, .theme-popup,
-input, button, .searchresults, .searchresults-header {
-  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-    "Source Han Sans SC", "Noto Sans CJK SC", system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+input, button, .searchresults {
+  font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
-/* 代码：等宽字体，保证对齐美观 */
 pre, code, kbd {
-  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas,
-    "Cascadia Code", Menlo, monospace;
+  font-family: "JetBrains Mono", "Fira Code", SFMono-Regular, Consolas,
+    Menlo, monospace;
 }
 
-/* ---- 正文可读性 ---- */
+/* ---- 2. 顶层导航栏：扁平、白底、1px 细线下分隔 ---- */
+.menu-bar {
+  background: var(--fenix-bg);
+  border-bottom: 1px solid var(--fenix-border);
+  box-shadow: none !important;
+}
+.menu-bar .menu-title { color: var(--fenix-ink); font-weight: 600; }
+
+/* ---- 3. 侧栏：白底、右侧 1px 细线 ---- */
+.sidebar {
+  background: var(--fenix-bg);
+  border-right: 1px solid var(--fenix-border);
+  box-shadow: none !important;
+}
+.sidebar .chapter li a,
+.sidebar .chapter li a.chapter-item { color: var(--fenix-ink); }
+
+/* ---- 4. 正文：文字色、字距、标题、链接 ---- */
 .content main {
-  line-height: 1.8;
+  color: var(--fenix-ink);
   font-size: 16px;
+  line-height: 1.8;
 }
-.content main p {
-  margin: 0 0 1em;
+.content main h1,
+.content main h2,
+.content main h3,
+.content main h4,
+.content main h5,
+.content main h6 {
+  color: var(--fenix-ink);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
+/* 标题里嵌的锚点链接保持文字色（fenix：标题不强调为链接蓝） */
+.content main h1 a, .content main h2 a, .content main h3 a,
+.content main h4 a, .content main h5 a, .content main h6 a {
+  color: inherit;
+}
+/* 正文链接：默认蓝、hover 墨绿、扁平无下划线装饰过重 */
+.content main a {
+  color: var(--fenix-link);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.content main a:hover { color: var(--fenix-link-hover); text-decoration: underline; }
 
-/* ---- 响应式正文宽度：宽屏居中限宽、窄屏自适应 ----
-   限制行宽以提升长文阅读体验，而非撑满整屏。 */
+/* ---- 5. 代码：扁平、无圆角阴影 ---- */
+.content main code {
+  color: var(--fenix-code-ink);
+  background: var(--fenix-code-bg);
+  border-radius: 0;
+}
+.content main pre {
+  background: var(--fenix-bg-soft);
+  border-radius: 0;
+  box-shadow: none !important;
+  border: 1px solid var(--fenix-border);
+}
+.content main pre code { background: transparent; }
+/* 代码高亮 token 的基础色，贴近 Material 浅色 */
+.content main .hljs { color: var(--fenix-ink); }
+.content main .hljs-keyword { color: #cf222e; }
+.content main .hljs-string  { color: #0969da; }
+.content main .hljs-number, .content main .hljs-literal { color: #0550ae; }
+.content main .hljs-comment { color: var(--fenix-ink-mute); font-style: italic; }
+.content main .hljs-title, .content main .hljs-title.function_,
+.content main .hljs-function, .content main .hljs-built_in { color: #8250df; }
+.content main .hljs-attr, .content main .hljs-attribute { color: #116329; }
+
+/* ---- 6. 引用块 / 表格：扁平细线 ---- */
+.content main blockquote {
+  background: var(--fenix-bg-soft);
+  border-left: 3px solid var(--fenix-border);
+  border-radius: 0;
+}
+.content main table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.content main table th,
+.content main table td { border: 1px solid var(--fenix-border); }
+.content main table th { background: var(--fenix-bg-soft); }
+
+/* ---- 7. 响应式正文宽度：宽屏居中限宽、窄屏自适应 ---- */
 .content main {
   max-width: 840px;
   margin: 0 auto;
@@ -35,32 +129,54 @@ pre, code, kbd {
   box-sizing: border-box;
 }
 @media (max-width: 768px) {
-  .content main {
-    padding: 0 16px;
-  }
+  .content main { padding: 0 16px; }
 }
+pre { max-width: 100%; overflow-x: auto; }
 
-/* 代码块自适应宽度并支持横向滚动，避免小屏撑破版式 */
-pre {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-/* ---- 深色 = 近纯黑底（替换默认 coal 的暗蓝）---- */
+/* ===========================================================================
+   深色模式（mdBook 内置 coal 主题）—— 对齐 Material slate 的深灰手感
+   =========================================================================== */
 .coal {
-  --bg: #0b0b0f;
-  --fg: #e8e8ea;
-  --sidebar-bg: #101016;
-  --sidebar-fg: #cfcfd6;
-  --links: #6ea8fe;
-  --inline-code-color: #9ecbff;
-  --quote-bg: #15151b;
+  --bg: #1e2226;
+  --fg: #d7dde2;
+  --sidebar-bg: #16191c;
+  --sidebar-fg: #d7dde2;
+  --sidebar-active: #2c3e50;
+  --sidebar-non-existant: #6b7280;
+  --sidebar-spacer: #2a2f34;
+  --scrollbar: #3a3f45;
+  --icons: #8a9299;
+  --icons-hover: #e6e6e6;
+  --links: #79b8ff;
+  --inline-code-color: #8ecae6;
+  --theme-popup-bg: #1e2226;
+  --theme-popup-border: #3a3f45;
+  --theme-hover: #2a2f34;
+  --quote-bg: #23272b;
+  --table-border-color: #3a3f45;
+  --table-header-bg: #262b30;
+  --table-alternate-bg: #202428;
+  --searchbar-bg: #1e2226;
+  --searchbar-fg: #d7dde2;
+  --searchbar-border-color: #3a3f45;
 }
-/* 浅色 = 纯白底（微调字体渲染） */
-.light {
-  --bg: #ffffff;
-  --fg: #1f2328;
-  --links: #0969da;
-  --inline-code-color: #8a2d1e;
-  --quote-bg: #f6f8fa;
-}
+.coal .menu-bar { background: #16191c; border-bottom-color: #2a2f34; box-shadow: none !important; }
+.coal .sidebar  { background: #16191c; border-right-color: #2a2f34; box-shadow: none !important; }
+.coal .content main { color: #d7dde2; }
+.coal .content main h1, .coal .content main h2, .coal .content main h3,
+.coal .content main h4, .coal .content main h5, .coal .content main h6 { color: #e6e9ec; }
+.coal .content main a { color: #79b8ff; }
+.coal .content main a:hover { color: #9fdcb6; }
+.coal .content main code { color: #8ecae6; background: rgba(110, 130, 150, 0.15); }
+.coal .content main pre { background: #16191c; border-color: #2a2f34; }
+.coal .content main blockquote { background: #202428; border-left-color: #3a3f45; }
+.coal .content main .hljs { color: #d7dde2; }
+.coal .content main .hljs-keyword { color: #f97583; }
+.coal .content main .hljs-string  { color: #79c0ff; }
+.coal .content main .hljs-number, .coal .content main .hljs-literal { color: #79c0ff; }
+.coal .content main .hljs-comment { color: #8a9299; }
+.coal .content main .hljs-title, .coal .content main .hljs-title.function_,
+.coal .content main .hljs-function, .coal .content main .hljs-built_in { color: #d2a8ff; }
+.coal .content main .hljs-attr, .coal .content main .hljs-attribute { color: #7ee787; }
+.coal .content main table th { background: #202428; }
+.coal .content main table th, .coal .content main table td { border-color: #3a3f45; }
