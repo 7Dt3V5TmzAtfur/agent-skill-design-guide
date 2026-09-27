@@ -1,0 +1,66 @@
+/* 简洁明暗双主题 + 响应式页面宽度 + 更好看的字体
+   仅保留美化：排版、字体、宽度；配色交给 mdBook 内置 light / coal 两套。 */
+
+/* ---- 字体：正文用系统无衬线、优先中文字体 ---- */
+html, body, .content main, .sidebar, .menu-title, .theme-popup,
+input, button, .searchresults, .searchresults-header {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Source Han Sans SC", "Noto Sans CJK SC", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 代码：等宽字体，保证对齐美观 */
+pre, code, kbd {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas,
+    "Cascadia Code", Menlo, monospace;
+}
+
+/* ---- 正文可读性 ---- */
+.content main {
+  line-height: 1.8;
+  font-size: 16px;
+}
+.content main p {
+  margin: 0 0 1em;
+}
+
+/* ---- 响应式正文宽度：宽屏居中限宽、窄屏自适应 ----
+   限制行宽以提升长文阅读体验，而非撑满整屏。 */
+.content main {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .content main {
+    padding: 0 16px;
+  }
+}
+
+/* 代码块自适应宽度并支持横向滚动，避免小屏撑破版式 */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ---- 深色 = 近纯黑底（替换默认 coal 的暗蓝）---- */
+.coal {
+  --bg: #0b0b0f;
+  --fg: #e8e8ea;
+  --sidebar-bg: #101016;
+  --sidebar-fg: #cfcfd6;
+  --links: #6ea8fe;
+  --inline-code-color: #9ecbff;
+  --quote-bg: #15151b;
+}
+/* 浅色 = 纯白底（微调字体渲染） */
+.light {
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --links: #0969da;
+  --inline-code-color: #8a2d1e;
+  --quote-bg: #f6f8fa;
+}

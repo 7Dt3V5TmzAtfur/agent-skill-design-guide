@@ -9,11 +9,11 @@ description = "系统掌握 AI 编程助手 Skill 设计方法论，从架构到
 build-dir = "book"
 
 [output.html]
-default-theme = "latte"
-preferred-dark-theme = "mocha"
+default-theme = "light"
+preferred-dark-theme = "coal"
 git-repository-url = "https://github.com/MarkShawn2020/agent-skill-design-guide"
 edit-url-template = "https://github.com/MarkShawn2020/agent-skill-design-guide/edit/main/{path}"
-additional-css = ["./theme/catppuccin.css"]
+additional-css = ["./theme/custom.css"]
 
 [output.html.search]
 enable = true
